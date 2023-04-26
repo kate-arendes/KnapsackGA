@@ -30,7 +30,7 @@ class Chromosome:
         for i in range(CHROM_LENGTH):
             self.bitstring += str(random.randint(0, 1))
 
-    # Returns weight of the items represented by the chromosome's bitstring
+    # get_weight() returns weight of the items represented by the chromosome's bitstring
 
     def get_weight(self):
         weight = 0
@@ -40,7 +40,7 @@ class Chromosome:
 
         return weight
 
-    # Returns value of the items represented by the chromosome's bitstring
+    # get_value() returns value of the items represented by the chromosome's bitstring
 
     def get_value(self):
         value = 0
@@ -50,7 +50,7 @@ class Chromosome:
 
         return value
 
-    # Determines whether the solution is valid (whether the weight exceeds the capacity)
+    # is_valid() determines whether the solution is valid (whether the weight exceeds the capacity)
 
     def is_valid(self):
         if self.get_weight() > self.capacity:
@@ -58,12 +58,12 @@ class Chromosome:
         else:
             return True
 
-    # Returns the different between the solution's weight and the capacity for use in penalization
+    # get_diff returns the different between the solution's weight and the capacity for use in penalization
 
     def get_diff(self):
         return self.get_weight() - self.capacity
 
-    # Performs bitwise mutation with a probably prob_mutate
+    # mutate() performs bitwise mutation with a probably prob_mutate
 
     def mutate(self, prob_mutate):
         for i in range(CHROM_LENGTH):
@@ -77,12 +77,12 @@ class Chromosome:
                     edited_string[i] = '1'
                     self.bitstring = ''.join(edited_string)
 
-    # Prints the chromosome's bitstring
+    # print_chrom() prints the chromosome's bitstring
 
     def print_chrom(self):
         print(self.bitstring)
 
-    # Assigns the bitstring of another chromosome to the current chromosome
+    # chrom_copy() assigns the bitstring of another chromosome to the current chromosome
 
     def chrom_copy(self, chromosome):
         self.bitstring = str(chromosome.bitstring)

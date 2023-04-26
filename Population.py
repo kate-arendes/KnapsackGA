@@ -1,11 +1,17 @@
 # Kate Arendes - CS5320 - Project 4 - Population.py
+# This file contains the Population class used to simulate and manage a collection of chromosomes
 
 from Chromosome import Chromosome
 from Chromosome import CHROM_LENGTH
 import random
 
 
+# The Population class takes a size for the number of chromosomes to generate and capacity as a problem parameter
+
 class Population:
+
+    # Initialized the population with a given number of chromosomes
+
     def __init__(self, size, cap):
         self.size = size
         self.gen = 0
@@ -20,10 +26,7 @@ class Population:
         for i in range(self.size):
             self.chromosomes.append(Chromosome(self.cap))
 
-    def print_pop(self):
-        for i in range(self.size):
-            self.chromosomes[i].print_chrom()
-            print(self.chromosomes[i].get_value())
+    # get_best() returns the best valid solution in the population
 
     def get_best(self):
         f_best = 0.0
@@ -39,25 +42,49 @@ class Population:
                 best_chrom = self.chromosomes[i]
         return best_chrom
 
+    # penalty_static() recalculates fitness values of invalid solutions using a constant penalty calculation scheme
+
     def penalty_static(self):
+
+        # If solutions are valid, their fitness is unchanged. Otherwise, they are penalized
+
         for i in range(self.size):
             if self.chromosomes[i].is_valid():
                 self.fitnesses.append(self.chromosomes[i].get_value())
             else:
+
+                # The difference between the solution's weight and the capacity is subtracted from the value
+
                 new_fitness = self.chromosomes[i].get_value() - (self.chromosomes[i].get_diff())
+
+                # Prevents divide-by-zero errors
+
                 if new_fitness <= 0:
                     new_fitness = 0.001
                 self.fitnesses.append(new_fitness)
 
+    # penalty_dynamic() recalculates fitness values of invalid solutions using a penalty scheme based on the generation
+
     def penalty_dynamic(self):
+
+        # If solutions are valid, their fitness is unchanged. Otherwise, they are penalized
+
         for i in range(self.size):
             if self.chromosomes[i].is_valid():
                 self.fitnesses.append(self.chromosomes[i].get_value())
             else:
+
+                # The penalty increases with each subsequent generation, progressively prioritizing valid solutions
+
                 new_fitness = self.chromosomes[i].get_value() - (1 + 0.01 * self.gen) * (self.chromosomes[i].get_diff())
+
+                # Prevents divide-by-zero errors
+
                 if new_fitness <= 0:
                     new_fitness = 0.001
                 self.fitnesses.append(new_fitness)
+
+    # prop_selection() generates a distribution on which sampling can be performed
 
     def prop_selection(self):
         fit_sum = 0.0
@@ -87,6 +114,7 @@ class Population:
         self.dist.clear()
 
     def one_point_cross(self, prob_c):
+
         # Picks pairs of chromosomes and performs crossover
 
         iterations = int(self.size / 2)
