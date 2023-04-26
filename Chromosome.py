@@ -3,7 +3,10 @@
 
 import random
 
-CHROM_LENGTH = 20
+CHROM_LENGTH = 20  # Length of bitstring used to represent the presence of items in the knapsack
+
+# WEIGHTS and VALUES represent the weights and corresponding values of items to be placed in the knapsack
+
 WEIGHTS = [8.599796663725433, 7.821589626462722, 4.7851442274776055, 3.3302507526366703, 5.601472492317477,
            4.644407237053729, 8.054187301312954, 3.7298145347103473, 5.2893725873712025, 6.250438355095281,
            9.173015966758017, 5.542181702356512, 3.5365405995973345, 7.802237837415015, 6.565320970077985,
@@ -15,13 +18,19 @@ VALUES = [13.599796663725433, 12.821589626462721, 9.785144227477605, 8.330250752
           8.254557072261965, 14.187716303714161, 14.845069284338878, 13.291955123969306, 14.119493553956245]
 
 
+# The Chromosome class is used to represent possible solutions to the knapsack problem
+
 class Chromosome:
+
+    # Initializes the chromosome with a random bitstring
 
     def __init__(self, capacity):
         self.bitstring = ""
         self.capacity = capacity
         for i in range(CHROM_LENGTH):
             self.bitstring += str(random.randint(0, 1))
+
+    # Returns weight of the items represented by the chromosome's bitstring
 
     def get_weight(self):
         weight = 0
@@ -31,6 +40,8 @@ class Chromosome:
 
         return weight
 
+    # Returns value of the items represented by the chromosome's bitstring
+
     def get_value(self):
         value = 0
         for i in range(CHROM_LENGTH):
@@ -39,14 +50,20 @@ class Chromosome:
 
         return value
 
+    # Determines whether the solution is valid (whether the weight exceeds the capacity)
+
     def is_valid(self):
         if self.get_weight() > self.capacity:
             return False
         else:
             return True
 
+    # Returns the different between the solution's weight and the capacity for use in penalization
+
     def get_diff(self):
         return self.get_weight() - self.capacity
+
+    # Performs bitwise mutation with a probably prob_mutate
 
     def mutate(self, prob_mutate):
         for i in range(CHROM_LENGTH):
@@ -60,8 +77,12 @@ class Chromosome:
                     edited_string[i] = '1'
                     self.bitstring = ''.join(edited_string)
 
+    # Prints the chromosome's bitstring
+
     def print_chrom(self):
         print(self.bitstring)
+
+    # Assigns the bitstring of another chromosome to the current chromosome
 
     def chrom_copy(self, chromosome):
         self.bitstring = str(chromosome.bitstring)
