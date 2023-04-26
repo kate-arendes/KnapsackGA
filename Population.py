@@ -87,18 +87,31 @@ class Population:
     # prop_selection() generates a distribution on which sampling can be performed
 
     def prop_selection(self):
+
+        # Sums up the fitnesses
+
         fit_sum = 0.0
         for i in range(self.size):
             fit_sum += self.fitnesses[i]
+
+        # Creates the distribution
 
         prob_sum = 0.0
         for i in range(self.size):
             self.dist.append(prob_sum + (self.fitnesses[i] / fit_sum))
             prob_sum += self.fitnesses[i] / fit_sum
 
+    # stoch_uni_sampling() performs stochastic universal sampling on the distribution
+
     def stoch_uni_sampling(self):
+
+        # Generates an initial point and calculates the intervals for the others
+
         point = random.uniform(0, 1)
         interval = 1.0 / self.size
+
+        # Samples the chromosomes from the distribution based on the generated points
+
         for i in range(self.size):
             current_point = (i * interval) + point
             if current_point > 1:
@@ -109,9 +122,14 @@ class Population:
                     new_chrom.chrom_copy(self.chromosomes[j])
                     self.sampled.append(new_chrom)
                     break
+
+        # Clears the lists for the next generation
+
         self.chromosomes.clear()
         self.fitnesses.clear()
         self.dist.clear()
+
+    # one_point_cross performs single-point crossover on the sampled chromosomes
 
     def one_point_cross(self, prob_c):
 
@@ -149,23 +167,29 @@ class Population:
 
     def gene_swap(self, first_chrom, second_chrom):
 
-        # Generate crossover point
+        # Generates crossover point
 
         point = random.randint(1, len(first_chrom.bitstring) - 1)
 
-        # Create resulting child bit strings
+        # Creates resulting child bit strings
 
         child1 = (first_chrom.bitstring[0:point] + second_chrom.bitstring[point:])
         child2 = (second_chrom.bitstring[0:point] + first_chrom.bitstring[point:])
 
-        # Replace parental bit strings with children's bit string
+        # Replaces parental bit strings with children's bit string
 
         first_chrom.bitstring = child1
         second_chrom.bitstring = child2
 
+    # uni_cross() performs 0.5-uniform crossover on the sampled chromosomes
+
     def uni_cross(self):
 
+        # Picks pairs of chromosomes and performs crossover
+
         iterations = int(self.size / 2)
+
+        # When two chromosomes are picked, they are removed from the selected list
 
         for i in range(iterations):
             index1 = random.randint(0, (len(self.sampled) - 1))
@@ -176,18 +200,30 @@ class Population:
             chrom2 = self.sampled[index2]
             del self.sampled[index2]
 
+            # On each pair, 0.5-uniform crossover is performed
+
             self.perform_uni_cross(chrom1, chrom2)
+
+            # The crossed chromosomes are saved for mutation
 
             self.crossed.append(chrom1)
             self.crossed.append(chrom2)
 
+        # Handles scenario in which there may be an odd number of chromosomes
+
         if self.sampled:
             self.crossed.append(self.sampled[0])
 
+    # perform_uni_cross() takes two chromosomes and performs 0.5-uniform crossover on them
+
     def perform_uni_cross(self, first_chrom, second_chrom):
+
+        # Creates two new bit strings for the children
 
         child1 = ""
         child2 = ""
+
+        # Randomly determines which parent will donate bits to each child
 
         for i in range(len(first_chrom.bitstring)):
             prob = random.randint(0, 1)
@@ -198,11 +234,16 @@ class Population:
                 child1 += second_chrom.bitstring[i]
                 child2 += first_chrom.bitstring[i]
 
+        # Assigns children's bit strings to the parent chromosomes
+
         first_chrom.bitstring = child1
         second_chrom.bitstring = child2
 
+    # multi_parent_cross() randomly picks three parents to create each child
 
     def multi_parent_cross(self):
+
+        # Picks three parents and performs majority voting to create a new child
 
         for i in range(self.size):
             parents = []
@@ -210,7 +251,12 @@ class Population:
                 index = random.randint(0, (len(self.sampled) - 1))
                 parents.append(self.sampled[index])
             self.crossed.append(self.maj_vote(parents))
+
+        # Clears the sampled list for the next generation
+
         self.sampled.clear()
+
+    # maj_vote takes a list of parents and does majority voting to generate their child
 
     def maj_vote(self, chroms):
 
@@ -232,9 +278,16 @@ class Population:
 
         return child
 
+    # mutation() goes through the list of crossed chromosomes and performs mutation
 
     def mutation(self, prob_m):
+
+        # Performs mutation and places the resulting chromosomes in the chromosomes list
+
         for i in range(len(self.crossed)):
             self.crossed[i].mutate(prob_m)
             self.chromosomes.append(self.crossed[i])
+
+        # Clears the list of crossed chromosomes
+
         self.crossed.clear()
