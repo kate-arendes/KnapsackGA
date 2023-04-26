@@ -1,3 +1,6 @@
+# Kate Arendes - CS 5320 - Project 4 - main.py
+# This program uses a GA to solve the 0-1 Knapsack Problem with various capacities
+
 from Chromosome import Chromosome
 from Chromosome import CHROM_LENGTH
 from Chromosome import WEIGHTS
@@ -6,7 +9,7 @@ from Population import Population
 import random
 import statistics
 
-RUNS = 30
+RUNS = 30  # Number of times algorithm executes per problem instance
 
 # CAPACITIES stores the capacities of two extreme cases and one regular case of the 0-1 Knapsack Problem
 

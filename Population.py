@@ -1,3 +1,5 @@
+# Kate Arendes - CS5320 - Project 4 - Population.py
+
 from Chromosome import Chromosome
 from Chromosome import CHROM_LENGTH
 import random
