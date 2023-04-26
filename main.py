@@ -16,11 +16,18 @@ RUNS = 30  # Number of times algorithm executes per problem instance
 CAPACITIES = [0, 65.21228109630442, 130.42456219260885]
 
 
+# evolve() takes problem parameters as well as a user's choice of penalty and crossover policies to perform the GA
+
 def evolve(members, generations, capacity, cross_prob, mut_prob, pen_type, cross_type):
+
+    # Instantiates population and best solution, which the function returns
+
     pop = Population(members, capacity)
 
     best_solution = pop.get_best()
     best_fit = pop.get_best().get_value()
+
+    # Performs the steps of the GA based on the penalty and crossover types the user selected
 
     for i in range(generations):
         if pen_type == 1:
@@ -40,21 +47,29 @@ def evolve(members, generations, capacity, cross_prob, mut_prob, pen_type, cross
 
         pop.mutation(mut_prob)
 
+        # Updates best solution
+
         if pop.get_best().get_value() > best_fit:
             best_solution = pop.get_best()
             best_fit = pop.get_best().get_value()
 
+    # Returns the best solution found over all generations
+
     return best_solution
 
 
+# run_algo() takes a penalty type and crossover type from the user and calls evolve() for three problem instances
+
 def run_algo(penalty, cross):
+
+    # Prints weights and values for all items. Only capacities change between instances to demonstrate extreme cases
 
     prob_string = " Problem Instance "
     print("\n" + prob_string.center(80, "=") + "\n")
     print("Weights:\n[", end="")
     for i in range(len(WEIGHTS)):
         print(str(WEIGHTS[i]), end="")
-        if i == 19:
+        if i == (len(WEIGHTS) - 1):
             print("]")
         elif i % 4 == 3:
             print()
@@ -63,13 +78,15 @@ def run_algo(penalty, cross):
     print("\nValues:\n[", end="")
     for i in range(len(VALUES)):
         print(str(VALUES[i]), end="")
-        if i == 19:
+        if i == (len(VALUES) - 1):
             print("]")
         elif i % 4 == 3:
             print(",")
         else:
             print(", ", end="")
     print()
+
+    # Gets results for each problem instance
 
     for k in range(3):
 
@@ -105,7 +122,7 @@ def run_algo(penalty, cross):
                 overall_best_chrom = best_solutions[j]
                 overall_f_best = best_solutions[j].get_value()
 
-        # Prints all the results from the independent runs
+        # Prints all the results from the independent runs for the given capacity
 
         result_string = " Results from 30 Independent Runs for Capacity = " + str(CAPACITIES[k]) + " "
         print("\n" + result_string.center(80, "=") + "\n")
@@ -128,5 +145,7 @@ if __name__ == '__main__':
     c_type = int(input("Please select a type of crossover: "))
 
     print("\nRunning the genetic algorithm . . .\n")
+
+    # Runs the algorithm with the user-selected penalty and crossover types
 
     run_algo(p_type, c_type)
