@@ -1,7 +1,6 @@
 import random
 
 CHROM_LENGTH = 20
-CAPACITY = 65
 WEIGHTS = [8.599796663725433, 7.821589626462722, 4.7851442274776055, 3.3302507526366703, 5.601472492317477,
            4.644407237053729, 8.054187301312954, 3.7298145347103473, 5.2893725873712025, 6.250438355095281,
            9.173015966758017, 5.542181702356512, 3.5365405995973345, 7.802237837415015, 6.565320970077985,
@@ -15,8 +14,9 @@ VALUES = [13.599796663725433, 12.821589626462721, 9.785144227477605, 8.330250752
 
 class Chromosome:
 
-    def __init__(self):
+    def __init__(self, capacity):
         self.bitstring = ""
+        self.capacity = capacity
         for i in range(CHROM_LENGTH):
             self.bitstring += str(random.randint(0, 1))
 
@@ -37,13 +37,13 @@ class Chromosome:
         return value
 
     def is_valid(self):
-        if self.get_weight() > CAPACITY:
+        if self.get_weight() > self.capacity:
             return False
         else:
             return True
 
     def get_diff(self):
-        return self.get_weight() - CAPACITY
+        return self.get_weight() - self.capacity
 
     def mutate(self, prob_mutate):
         for i in range(CHROM_LENGTH):

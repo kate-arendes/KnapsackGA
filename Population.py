@@ -4,9 +4,10 @@ import random
 
 
 class Population:
-    def __init__(self, size):
+    def __init__(self, size, cap):
         self.size = size
         self.gen = 0
+        self.cap = cap
 
         self.chromosomes = []
         self.fitnesses = []
@@ -15,7 +16,7 @@ class Population:
         self.crossed = []
 
         for i in range(self.size):
-            self.chromosomes.append(Chromosome())
+            self.chromosomes.append(Chromosome(self.cap))
 
     def print_pop(self):
         for i in range(self.size):
@@ -24,7 +25,7 @@ class Population:
 
     def get_best(self):
         f_best = 0.0
-        best_chrom = Chromosome()
+        best_chrom = Chromosome(self.cap)
         best_chrom.bitstring = ""
 
         for i in range(CHROM_LENGTH):
@@ -75,7 +76,7 @@ class Population:
                 current_point -= 1
             for j in range(self.size):
                 if current_point < self.dist[j]:
-                    new_chrom = Chromosome()
+                    new_chrom = Chromosome(self.cap)
                     new_chrom.chrom_copy(self.chromosomes[j])
                     self.sampled.append(new_chrom)
                     break
@@ -183,7 +184,7 @@ class Population:
 
     def maj_vote(self, chroms):
 
-        child = Chromosome()
+        child = Chromosome(self.cap)
         child.bitstring = ""
 
         for i in range(len(chroms[1].bitstring)):
