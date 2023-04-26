@@ -76,7 +76,7 @@ class Population:
 
                 # The penalty increases with each subsequent generation, progressively prioritizing valid solutions
 
-                new_fitness = self.chromosomes[i].get_value() - (1 + 0.01 * self.gen) * (self.chromosomes[i].get_diff())
+                new_fitness = self.chromosomes[i].get_value() - (1 + 0.6 * self.gen) * (self.chromosomes[i].get_diff())
 
                 # Prevents divide-by-zero errors
 
@@ -291,3 +291,7 @@ class Population:
         # Clears the list of crossed chromosomes
 
         self.crossed.clear()
+
+        # Since mutation occurs last, increments the population's generation
+
+        self.gen += 1
