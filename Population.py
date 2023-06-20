@@ -1,4 +1,4 @@
-# Kate Arendes - CS5320 - Project 4 - Population.py
+# Kate Arendes - Population.py
 # This file contains the Population class used to simulate and manage a collection of chromosomes
 
 from Chromosome import Chromosome
