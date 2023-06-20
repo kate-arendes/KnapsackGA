@@ -1,4 +1,4 @@
-# Kate Arendes - CS 5320 - Project 4 - main.py
+# Kate Arendes - main.py
 # This program uses a GA to solve the 0-1 Knapsack Problem with various capacities
 
 from Chromosome import Chromosome
