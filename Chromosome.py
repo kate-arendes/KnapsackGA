@@ -1,4 +1,4 @@
-# Kate Arendes - CS 5320 - Project 4 - Chromosome.py
+# Kate Arendes - Chromosome.py
 # This file contains the Chromosome class as well as randomly generated weights and values for the 0-1 Knapsack Problem
 
 import random
